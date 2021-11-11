@@ -37,6 +37,17 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            "title"=>"required|max:60",
+            "thumb"=>"required",
+            "price"=>"required|digit",
+            "series"=>"required|max:80",
+            "sale_date"=>"required|date_format",
+            "thumb"=> "required|url",
+            "description"=> "required"
+
+        ]);
+
         $data = $request->all();
         // $newBook = new Book();
         // $newBook->title= $data["title"];
@@ -47,10 +58,15 @@ class BookController extends Controller
         // $newBook->sale_date =$data["sale_date"];
         // $newBook->type = $data["type"];
         // $newBook->save();
+    
+
+
         // se il nome della colonna è uguale al nome che ci arriva dal form possiamo nel model impostare i valori da passare e utilizzare 
-        
-        $newBook = Book::create($data);
+        //  Per il passaggio "massive" nel model vanno impostati quali valori passare per sicurezza! 
+                $newBook = Book::create($data);
         // dd($data);
+        //validazione
+       
         return redirect()->route("books.show",$newBook["id"]);
     }
 
@@ -62,6 +78,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+        
         // dipendent injection 
         // $book= Book::find($id);
         //oppure possiamo mettere nella funzione come paramatri  Book (il mnodel) e la variaile $book e fa già un controllo se la risorsa c'è !

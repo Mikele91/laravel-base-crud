@@ -47,7 +47,7 @@
             <button type="submit" class="btn btn-danger" >Elimina</button>
             </form>
 
-        </td>
+        </td> 
 
  </tr> 
  @endforeach
