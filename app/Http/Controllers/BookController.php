@@ -38,15 +38,18 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $newBook = new Book();
-        $newBook->title= $data["title"];
-        $newBook->description =$data["description"] ;
-        $newBook->thumb =$data["thumb"];
-        $newBook->price =$data["price"];
-        $newBook->series =$data["series"];
-        $newBook->sale_date =$data["sale_date"];
-        $newBook->type = $data["type"];
-        $newBook->save();
+        // $newBook = new Book();
+        // $newBook->title= $data["title"];
+        // $newBook->description =$data["description"] ;
+        // $newBook->thumb =$data["thumb"];
+        // $newBook->price =$data["price"];
+        // $newBook->series =$data["series"];
+        // $newBook->sale_date =$data["sale_date"];
+        // $newBook->type = $data["type"];
+        // $newBook->save();
+        // se il nome della colonna è uguale al nome che ci arriva dal form possiamo nel model impostare i valori da passare e utilizzare 
+        
+        $newBook = Book::create($data);
         // dd($data);
         return redirect()->route("books.show",$newBook["id"]);
     }
@@ -57,9 +60,11 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Book $book)
     {
-        $book= Book::find($id);
+        // dipendent injection 
+        // $book= Book::find($id);
+        //oppure possiamo mettere nella funzione come paramatri  Book (il mnodel) e la variaile $book e fa già un controllo se la risorsa c'è !
         return view("books.show", compact("book"));
     }
 
@@ -69,9 +74,9 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Book $book) //procacciamo il file
     {
-        //
+        return view("books.edit",compact("book"));
     }
 
     /**
@@ -81,9 +86,11 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Book $book)
     {
-        //
+        $data = $request->all();
+        $book->update($data);
+        return redirect()->route("books.show",$book["id"]);
     }
 
     /**
@@ -92,8 +99,10 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        //
+        $book->delete();
+        return redirect()->route("books.index");
+
     }
 }

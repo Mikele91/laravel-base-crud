@@ -21,6 +21,7 @@
       </tr>
     </thead>
     <tbody>
+      
  @foreach ($books as $book)
      
     <tr>
@@ -35,12 +36,20 @@
         <td>
             <a href=" {{route("books.show", $book["id"])}}">
                 <button type="button" class="btn btn-primary">Visualizza</button>
-
             </a>
+            <a href="{{route("books.edit", $book["id"])}}">
+
+              <button type="button" class="btn btn-warning">Modifica</button>
+            </a>
+            <form onsubmit="return confirm('Sei sicuro di voler eliminare?')"  action="{{route("books.destroy",$book["id"])}}" method="POST">
+            @csrf
+            @method("DELETE")
+            <button type="submit" class="btn btn-danger" >Elimina</button>
+            </form>
 
         </td>
 
- </tr>
+ </tr> 
  @endforeach
 
     </tbody>
